@@ -19,7 +19,7 @@
             hide-details
             append-inner-icon="mdi-magnify"
             placeholder="Search"
-        ></v-text-field>
+        />
       </v-responsive>
 
     </v-app-bar>
