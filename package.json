@@ -24,6 +24,8 @@
   },
   "devDependencies": {
     "@unocss/nuxt": "^66.1.0-beta.12",
+    "@vueuse/core": "^13.1.0",
+    "@vueuse/nuxt": "^13.1.0",
     "unocss": "^66.1.0-beta.12"
   }
 }

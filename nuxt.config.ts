@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     '@nuxt/image',
     'vuetify-nuxt-module',
     '@unocss/nuxt',
+    '@vueuse/nuxt',
   ],
   vuetify: {
     moduleOptions: {
@@ -22,6 +23,11 @@ export default defineNuxtConfig({
       icons: {
         defaultSet: 'mdi'
       }
+    }
+  },
+  runtimeConfig: {
+    public: {
+      apiKey: "b7f7d13f7fb8d9fa2709ae92515f4247"
     }
   }
 })
