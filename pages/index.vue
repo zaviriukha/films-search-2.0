@@ -11,7 +11,7 @@ async function searchFilms() {
     )
 
     movies.value = response.results
-        .slice(0, 10)
+        // .slice(0, 10)
         .map((movie: any) => ({
           id: movie.id,
           title: movie.title,
