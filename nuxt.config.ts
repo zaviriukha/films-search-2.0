@@ -11,6 +11,7 @@ export default defineNuxtConfig({
     'vuetify-nuxt-module',
     '@unocss/nuxt',
     '@vueuse/nuxt',
+    '@pinia/nuxt'
   ],
   vuetify: {
     moduleOptions: {
