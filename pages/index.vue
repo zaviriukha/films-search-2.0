@@ -1,27 +1,40 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import { useDateFormat } from '@vueuse/core'
 import MovieCard from '~/components/MovieCard.vue'
 
 const runtimeConfig = useRuntimeConfig()
-const movies = ref([])
+const movies = ref<any[]>([])
 
 async function searchFilms() {
   try {
-    const response = await $fetch(
+    const response = await $fetch<{
+      results: any[]
+    }>(
         `https://api.themoviedb.org/3/discover/movie?page=1&api_key=${runtimeConfig.public.apiKey}`
     )
 
-    movies.value = response.results
-        // .slice(0, 10)
-        .map((movie: any) => ({
-          id: movie.id,
-          title: movie.title,
-          poster: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-          rating: movie.vote_average,
-          date: useDateFormat(new Date(movie.release_date), 'MMM Do YYYY').value,
-        }))
-    console.log(movies)
+    movies.value = response.results.map((m) => {
+      // Форматируем дату как строку
+      const formattedDate = useDateFormat(
+          new Date(m.release_date),
+          'MMM Do YYYY',
+          { locales: 'en-US' }
+      ).value
+
+      return {
+        // разворачиваем все поля из API (id, title, overview, и т.д.)
+        ...m,
+        // добавляем/перезаписываем:
+        poster: `https://image.tmdb.org/t/p/w500${m.poster_path}`,
+        rating: m.vote_average,
+        date: formattedDate,
+      }
+    })
+
+    console.log('All movies loaded:', movies.value)
   } catch (e) {
-    console.error(e)
+    console.error('Failed to fetch movies:', e)
   }
 }
 
@@ -40,7 +53,7 @@ searchFilms()
           sm="6"
           md="4"
           lg="3"
-          xl="2.4"
+          xl="2"
       >
         <MovieCard
             :title="movie.title"
