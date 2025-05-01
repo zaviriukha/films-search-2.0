@@ -1,5 +1,5 @@
 <script setup lang="ts">
-
+const moviesStore = useMoviesStore()
 </script>
 
 <template>
@@ -15,11 +15,14 @@
             max-width="344"
         >
           <v-text-field
+              v-model="moviesStore.searchString"
               variant="outlined"
               density="compact"
               hide-details
               append-inner-icon="mdi-magnify"
               placeholder="Search"
+              @click:append-inner="moviesStore.searchMovies"
+              @keyup.enter="moviesStore.searchMovies"
           />
         </v-responsive>
       </v-container>

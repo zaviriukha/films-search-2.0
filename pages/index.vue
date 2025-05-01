@@ -1,63 +1,12 @@
 <script setup lang="ts">
-import {ref} from 'vue'
-import {useDateFormat} from '@vueuse/core'
 import MovieCard from '~/components/MovieCard.vue'
+import {useMoviesStore} from "~/stores/movies";
+const moviesStore = useMoviesStore();
 
-interface Results {
-  id: number,
-  title: string,
-  vote_average: number,
-  poster_path: string,
-  release_date: string,
-}
+onBeforeMount(() => {
+  moviesStore.featureMovies()
+})
 
-interface Movies {
-  total_pages: number,
-  total_results: number,
-  results: Results[]
-}
-
-const runtimeConfig = useRuntimeConfig()
-const searchString: Ref<string> = ref("")
-const movies: Ref<Movies | null> = ref([])
-const messageStore = useMessageStore()
-
-async function searchFilms() {
-  try {
-    const response = await $fetch<{
-      results: any[]
-    }>(
-        `https://api.themoviedb.org/3/discover/movie?page=1&api_key=${runtimeConfig.public.apiKey}`
-    )
-
-    movies.value = response.results
-        .map((m) => {
-          // Форматируем дату как строку
-          const formattedDate = useDateFormat(
-              new Date(m.release_date),
-              'MMM Do YYYY',
-              {locales: 'en-US'}
-          ).value
-
-          return {
-            ...m,
-            // добавляем/перезаписываем:
-            poster: `https://image.tmdb.org/t/p/w500${m.poster_path}`,
-            rating: m.vote_average,
-            date: formattedDate,
-          }
-        })
-        .slice(0, 10)
-
-    console.log('All movies loaded:', movies.value)
-  } catch (e) {
-    messageStore.showMessage = true;
-    messageStore.message = e.message
-    console.error('Failed to fetch movies:', e)
-  }
-}
-
-searchFilms()
 </script>
 
 <template>
@@ -66,8 +15,8 @@ searchFilms()
 
     <v-row>
       <v-col
-          v-for="movie in movies"
-          :key="movie.id"
+          v-for="(movie, index) in moviesStore.movies?.results"
+          :key="index"
           cols="12"
           sm="6"
           md="4"

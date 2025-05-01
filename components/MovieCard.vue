@@ -14,7 +14,7 @@ defineProps<{
     />
     <RateCircle :rating="rating" />
 
-    <v-card-text style="background-color: transparent !important;">
+    <v-card-text>
       <div class="font-weight-bold ms-1 mb-2 text-xl text-white">
         {{ title }}
       </div>
