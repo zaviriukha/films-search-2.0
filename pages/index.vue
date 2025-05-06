@@ -21,7 +21,7 @@ onBeforeMount(() => {
               :length="moviesStore.movies?.total_pages"
               class="my-4"
               @update:modelValue="moviesStore.searchMovies"
-          ></v-pagination>
+          />
         </v-container>
       </v-col>
     </v-row>
