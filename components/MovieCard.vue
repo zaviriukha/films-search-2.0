@@ -5,6 +5,10 @@ defineProps<{
   poster: string
   rating: number
 }>()
+
+function titleStrings(title: string) {
+  return `${title.substring(0, 25)} ${title.length > 25 ? "..." : ""}`
+}
 </script>
 
 <template>
@@ -16,7 +20,9 @@ defineProps<{
 
     <v-card-text>
       <div class="font-weight-bold ms-1 mb-2 text-xl text-white">
-        {{ title }}
+        {{
+          titleStrings(title)
+        }}
       </div>
       <div class="font-weight-bold ms-1 mb-2 text-sm text-gray-500/75">
         {{ date }}
