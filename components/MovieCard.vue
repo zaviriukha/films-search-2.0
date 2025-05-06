@@ -7,7 +7,7 @@ defineProps<{
 }>()
 
 function titleStrings(title: string) {
-  return `${title.substring(0, 25)} ${title.length > 25 ? "..." : ""}`
+  return `${title.substring(0, 20)} ${title.length > 20 ? "..." : ""}`
 }
 </script>
 
