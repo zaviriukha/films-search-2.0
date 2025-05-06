@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, type Ref, watch } from 'vue'
+import { ref, watch, type Ref } from 'vue'
 import { useDateFormat } from '@vueuse/core'
 import { useMessageStore } from './message'
 
@@ -24,7 +24,7 @@ export const useMoviesStore = defineStore('movies', () => {
     const loading: Ref<boolean> = ref(false)
     const messageStore = useMessageStore()
 
-    // movie formatting function
+    //  movie format
     function formatMovie(m: Results) {
         const formattedDate = useDateFormat(
             new Date(m.release_date),
@@ -40,7 +40,7 @@ export const useMoviesStore = defineStore('movies', () => {
         }
     }
 
-    // popular movies
+    // Loading popular
     async function featureMovies() {
         loading.value = true
         try {
@@ -54,9 +54,8 @@ export const useMoviesStore = defineStore('movies', () => {
                 total_results: response.total_results,
                 results: response.results
                     .map(formatMovie)
-                    .slice(0, 12), // card limit
+                    .slice(0, 12) // ограничение по карточкам
             }
-            console.log('All movies loaded:', movies.value)
         } catch (e) {
             messageStore.showMessage = true
             messageStore.message = e.message || 'Unknown error'
@@ -72,7 +71,8 @@ export const useMoviesStore = defineStore('movies', () => {
         try {
             const runtimeConfig = useRuntimeConfig()
             const response: Movies = await $fetch(
-                `https://api.themoviedb.org/3/search/movie?include_adult=true&page=${page.value}` +
+                `https://api.themoviedb.org/3/search/movie?include_adult=true` +
+                `&page=${page.value}` +
                 `&query=${encodeURIComponent(searchString.value)}` +
                 `&api_key=${runtimeConfig.public.apiKey}`
             )
@@ -80,9 +80,8 @@ export const useMoviesStore = defineStore('movies', () => {
             movies.value = {
                 total_pages: response.total_pages,
                 total_results: response.total_results,
-                results: response.results.map(formatMovie),
+                results: response.results.map(formatMovie)
             }
-            console.log('Search results loaded:', movies.value)
         } catch (e) {
             messageStore.showMessage = true
             messageStore.message = e.message || 'Unknown error'
@@ -92,13 +91,23 @@ export const useMoviesStore = defineStore('movies', () => {
         }
     }
 
-    watch(page, () => {
-        if (searchString.value.trim()) {
-            searchMovies()
-        } else {
-            featureMovies()
-        }
+    // When entering a new searchString, we reset pagination to 1
+    watch(searchString, () => {
+        page.value = 1
     })
+
+    // When changing either the page number or the search string, we go to either featureMovies or searchMovies
+    watch(
+        [page, searchString],
+        ([, newSearch]) => {
+            if (newSearch.trim()) {
+                void searchMovies()
+            } else {
+                void featureMovies()
+            }
+        },
+        { immediate: true }
+    )
 
     return {
         featureMovies,
@@ -106,6 +115,6 @@ export const useMoviesStore = defineStore('movies', () => {
         movies,
         searchString,
         page,
-        loading,
+        loading
     }
 })

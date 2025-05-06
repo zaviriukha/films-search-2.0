@@ -14,6 +14,7 @@ const moviesStore = useMoviesStore()
         <v-responsive
             max-width="344"
         >
+
           <v-text-field
               v-model="moviesStore.searchString"
               variant="outlined"
@@ -21,9 +22,8 @@ const moviesStore = useMoviesStore()
               hide-details
               append-inner-icon="mdi-magnify"
               placeholder="Search"
-              @click:append-inner="moviesStore.searchMovies"
-              @keyup.enter="moviesStore.searchMovies"
           />
+
         </v-responsive>
       </v-container>
     </v-app-bar>
