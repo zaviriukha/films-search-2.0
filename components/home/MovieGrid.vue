@@ -25,6 +25,7 @@ onBeforeMount(() => {
           :poster="movie.poster"
           :rating="movie.rating"
           :date="movie.date"
+          :id="movie.id"
       />
     </v-col>
   </v-row>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const moviesStore = useMoviesStore()
+const moviesStore = useMoviesStore();
 </script>
 
 <template>
@@ -8,7 +8,7 @@ const moviesStore = useMoviesStore()
       <v-container class="d-flex justify-center align-center">
         <v-icon size="40">mdi-home</v-icon>
 
-        <v-app-bar-title class="text-h4 ml-4">Films Search 2.0</v-app-bar-title>
+        <v-app-bar-title class="text-h4 ml-4 cursor-pointer" @click="$router.push(`/`)">Films Search 2.0</v-app-bar-title>
         <v-spacer/>
 
         <v-responsive

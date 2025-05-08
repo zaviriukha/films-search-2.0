@@ -48,6 +48,7 @@ export const useMoviesStore = defineStore('movies', () => {
             const response: Movies = await $fetch(
                 `https://api.themoviedb.org/3/discover/movie?page=${page.value}&api_key=${runtimeConfig.public.apiKey}`
             )
+            console.log(response)
 
             movies.value = {
                 total_pages: response.total_pages,
