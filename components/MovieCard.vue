@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import RateCircle from "~/components/home/RateCircle.vue";
+
 const router = useRouter();
 
 defineProps<{
@@ -19,7 +21,7 @@ function titleStrings(title: string) {
     <v-img
         :src="poster"
     />
-    <RateCircle :rating="rating" />
+    <RateCircle :rating="rating"/>
 
     <v-card-text>
       <div class="font-weight-bold ms-1 mb-2 text-xl text-white">

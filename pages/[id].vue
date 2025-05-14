@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 import { useDateFormat } from '@vueuse/core'
+import DetailsRate from "~/components/movieDetails/detailsRate.vue";
+
 const route = useRoute()
 const runtimeConfig = useRuntimeConfig()
 
@@ -9,7 +11,15 @@ interface Cast {
   name: string
   character: string
 }
-
+interface Genres {
+  name: string
+}
+interface VideoResults {
+  key: string
+}
+interface Videos {
+  results: VideoResults[]
+}
 interface MovieApi {
   title: string
   backdrop_path: string
@@ -18,62 +28,85 @@ interface MovieApi {
   budget: number
   credits: {
     cast: Cast[]
-  }
+  },
+  genres: Genres[],
+  vote_average: number,
+  overview: string,
+  videos: Videos
 }
 
-// Our local type after transform
 interface Movie {
   title: string
   backdrop_path: string
   release_date: string
-  runtime: number
-  budget: number
-  cast: Cast[]
+  runtime: string
+  budget: string
+  cast: Cast[],
+  genres: Genres[],
+  vote_average: number,
+  overview: string,
+  video: string | null
 }
 
-const { data: movie, pending, error } = await useFetch<MovieApi,
-    Movie>(
+const { data: movie, pending, error } = await useFetch<MovieApi, Movie>(
     `https://api.themoviedb.org/3/movie/${route.params.id}` +
     `?api_key=${runtimeConfig.public.apiKey}` +
-    `&append_to_response=credits`,
+    `&append_to_response=credits,videos`,
     {
-      // take only the necessary fields and “pop up” credits.cast → cast
       transform: (input) => ({
         title: input.title,
         backdrop_path: input.backdrop_path,
-        release_date: useDateFormat(
-            new Date(input.release_date),
-            'MMM Do YYYY',
-            { locales: 'en-US' }
-        ),
-        runtime: `${parseInt(input.runtime/60).toString()}h ${input.runtime % 60}min`,
-        budget: input.budget.toLocaleString("en-US", {currency: "USD", style: "currency" }),
+        release_date: useDateFormat(new Date(input.release_date), 'MMM Do YYYY', { locales: 'en-US' }),
+        runtime: `${Math.floor(input.runtime / 60)}h ${input.runtime % 60}min`,
+        budget: input.budget.toLocaleString("en-US", { currency: "USD", style: "currency" }),
         cast: input.credits.cast,
+        genres: input.genres,
+        vote_average: input.vote_average,
+        overview: input.overview,
+        video: input.videos?.results?.[0]?.key
+            ? `https://www.youtube.com/embed/${input.videos.results[0].key}`
+            : null
       })
     }
 )
+
 </script>
 
 <template>
   <v-container>
-    <v-row>
+    <v-row class="mt-4">
       <v-col cols="6">
         <v-img
             :src="`https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`"
         />
       </v-col>
       <v-col cols="6">
-        <h2 class="text-4xl mb-4">{{ movie?.title }}</h2>
-        <div class="d-flex gap-4">
+        <div class="text-4xl mb-4 font-bold">{{ movie?.title }}</div>
+        <div class="d-flex gap-4 mb-3">
           <p class="text-subtitle-1 text-grey">{{ movie?.release_date }} - {{ movie?.runtime }} - {{ movie?.budget }}</p>
         </div>
-
-<!--        <h3 class="mt-6">Cast:</h3>-->
-<!--        <ul>-->
-<!--          <li v-for="member in movie?.cast" :key="member.name">-->
-<!--            {{ member.name }} as {{ member.character }}-->
-<!--          </li>-->
-<!--        </ul>-->
+        <div class="d-flex gap-4">
+          <v-chip variant="outlined" v-for="(genre, index) in movie?.genres" :key="index">{{ genre?.name }}</v-chip>
+        </div>
+        <DetailsRate :rating="movie?.vote_average" class="mb-4" />
+        <p class="text-subtitle-1">{{ movie?.overview }}</p>
+      </v-col>
+    </v-row>
+    <v-row class="mt-4">
+      <v-col cols="6">
+        <div class="text-4xl mb-4">Cast</div>
+      </v-col>
+      <v-col cols="6">
+        <div class="text-4xl mb-4">Trailer</div>
+        <iframe
+            v-if="movie?.video"
+            :src="movie.video"
+            width="100%"
+            height="315"
+            frameborder="0"
+            allowfullscreen
+        ></iframe>
+        <p v-else>No trailer available.</p>
       </v-col>
     </v-row>
   </v-container>
