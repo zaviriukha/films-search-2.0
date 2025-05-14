@@ -103,7 +103,6 @@ const { data: movie, pending, error } = await useFetch<MovieApi, Movie>(
             :src="movie.video"
             width="100%"
             height="350"
-            frameborder="0"
             allowfullscreen
         ></iframe>
         <p v-else>No trailer available.</p>
