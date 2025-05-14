@@ -4,11 +4,16 @@ const moviesStore = useMoviesStore();
 
 <template>
   <v-app id="inspire">
-    <v-app-bar height="57" color="#0E192A" class="px-10">
+    <v-app-bar height="57" color="#0E192A" class="px-2 px-sm-10">
       <v-container class="d-flex justify-center align-center">
-        <v-icon size="40">mdi-home</v-icon>
+        <v-icon size="40" @click="$router.push(`/`)">mdi-video-vintage</v-icon>
 
-        <v-app-bar-title class="text-h4 ml-4 cursor-pointer" @click="$router.push(`/`)">Films Search 2.0</v-app-bar-title>
+        <v-app-bar-title
+            class="text-h4 ml-4 cursor-pointer d-none d-sm-flex"
+            @click="$router.push(`/`)"
+        >
+          Films Search 2.0
+        </v-app-bar-title>
         <v-spacer/>
 
         <v-responsive

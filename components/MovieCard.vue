@@ -33,3 +33,4 @@ function titleStrings(title: string) {
     </v-card-text>
   </v-card>
 </template>
+
