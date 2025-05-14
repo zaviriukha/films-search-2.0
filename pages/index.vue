@@ -17,8 +17,8 @@ onBeforeMount(() => {
     <v-row justify="center">
       <v-col cols="8">
         <v-pagination
-            v-model="moviesStore.page"
             v-if="moviesStore.movies && moviesStore.movies.total_pages > 1"
+            v-model="moviesStore.page"
             :length="moviesStore.movies?.total_pages"
         />
       </v-col>
