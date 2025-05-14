@@ -81,7 +81,21 @@ const { data: movie } = await useFetch<MovieApi, Movie>(
       <v-col cols="12" md="6">
         <v-img
             :src="`https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`"
-        />
+            cover
+        >
+          <template #placeholder>
+            <v-row
+                class="fill-height ma-0"
+                align="center"
+                justify="center"
+            >
+              <v-progress-circular
+                  indeterminate
+                  color="grey lighten-5"
+              />
+            </v-row>
+          </template>
+        </v-img>
       </v-col>
       <v-col cols="12" md="6">
         <div class="text-4xl mb-4 font-bold">{{ movie?.title }}</div>
@@ -135,7 +149,20 @@ const { data: movie } = await useFetch<MovieApi, Movie>(
                   height="200"
                   class="object-top"
                   cover
-              />
+              >
+                <template #placeholder>
+                  <v-row
+                      class="fill-height ma-0"
+                      align="center"
+                      justify="center"
+                  >
+                    <v-progress-circular
+                        indeterminate
+                        color="grey lighten-5"
+                    />
+                  </v-row>
+                </template>
+              </v-img>
               <v-card-text class="text-center">
                 <div class="font-weight-bold text-lg mb-1">{{ actor.name }}</div>
                 <div class="text-grey text-sm">{{ actor.character }}</div>
