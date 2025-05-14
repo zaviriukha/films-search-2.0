@@ -10,7 +10,7 @@ onBeforeMount(() => {
 
 <template>
   <v-container>
-    <p class="text-h4 mt-8 mt-sm-16 font-bold mb-8">Popular Today</p>
+    <p class="text-h4 mt-4  font-bold mb-8">Popular Today</p>
 
     <MovieGrid/>
 
