@@ -78,23 +78,32 @@ const { data: movie, pending, error } = await useFetch<MovieApi, Movie>(
 <template>
   <v-container>
     <v-row class="mt-4">
-      <v-col cols="6">
+      <v-col cols="12" md="6">
         <v-img
             :src="`https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`"
         />
       </v-col>
-      <v-col cols="6">
+      <v-col cols="12" md="6">
         <div class="text-4xl mb-4 font-bold">{{ movie?.title }}</div>
         <div class="d-flex gap-4 mb-3">
-          <p class="text-subtitle-1 text-grey">{{ movie?.release_date }} - {{ movie?.runtime }} - {{ movie?.budget }}</p>
+          <p class="text-subtitle-1 text-grey">
+            {{ movie?.release_date }} - {{ movie?.runtime }} - {{ movie?.budget }}
+          </p>
         </div>
         <div class="d-flex gap-4">
-          <v-chip variant="outlined" v-for="(genre, index) in movie?.genres" :key="index">{{ genre?.name }}</v-chip>
+          <v-chip
+              variant="outlined"
+              v-for="(genre, index) in movie?.genres"
+              :key="index"
+          >
+            {{ genre?.name }}
+          </v-chip>
         </div>
         <DetailsRate :rating="movie?.vote_average" class="mb-4" />
         <p class="text-subtitle-1">{{ movie?.overview }}</p>
       </v-col>
     </v-row>
+
     <v-row class="mt-4">
       <v-col cols="12" md="6">
         <div class="text-4xl mb-4">Trailer</div>
@@ -115,7 +124,7 @@ const { data: movie, pending, error } = await useFetch<MovieApi, Movie>(
           <v-col
               v-for="(actor, index) in movie?.cast"
               :key="index"
-              cols="12"
+              cols="6"
               sm="6"
               md="4"
               class="d-flex"
@@ -123,7 +132,8 @@ const { data: movie, pending, error } = await useFetch<MovieApi, Movie>(
             <v-card class="w-100" outlined>
               <v-img
                   :src="`https://image.tmdb.org/t/p/w300/${actor.profile_path}`"
-                  height="150"
+                  height="200"
+                  class="object-top"
                   cover
               />
               <v-card-text class="text-center">
@@ -134,6 +144,7 @@ const { data: movie, pending, error } = await useFetch<MovieApi, Movie>(
           </v-col>
         </v-row>
       </v-col>
+
     </v-row>
 
   </v-container>
