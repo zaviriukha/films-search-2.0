@@ -59,13 +59,16 @@ const { data: movie, pending, error } = await useFetch<MovieApi, Movie>(
         release_date: useDateFormat(new Date(input.release_date), 'MMM Do YYYY', { locales: 'en-US' }),
         runtime: `${Math.floor(input.runtime / 60)}h ${input.runtime % 60}min`,
         budget: input.budget.toLocaleString("en-US", { currency: "USD", style: "currency" }),
-        cast: input.credits.cast,
+        // cast: input.credits.cast,
         genres: input.genres,
         vote_average: input.vote_average,
         overview: input.overview,
         video: input.videos?.results?.[0]?.key
             ? `https://www.youtube.com/embed/${input.videos.results[0].key}`
-            : null
+            : null,
+        cast: input.credits.cast
+            .filter((item) => item.profile_path)
+            .slice(0, 8)
       })
     }
 )
@@ -93,21 +96,45 @@ const { data: movie, pending, error } = await useFetch<MovieApi, Movie>(
       </v-col>
     </v-row>
     <v-row class="mt-4">
-      <v-col cols="6">
-        <div class="text-4xl mb-4">Cast</div>
-      </v-col>
-      <v-col cols="6">
+      <v-col cols="12" md="6">
         <div class="text-4xl mb-4">Trailer</div>
         <iframe
             v-if="movie?.video"
             :src="movie.video"
             width="100%"
-            height="315"
+            height="350"
             frameborder="0"
             allowfullscreen
         ></iframe>
         <p v-else>No trailer available.</p>
       </v-col>
+
+      <v-col cols="12" md="6">
+        <div class="text-4xl mb-4">Cast</div>
+        <v-row>
+          <v-col
+              v-for="(actor, index) in movie?.cast"
+              :key="index"
+              cols="12"
+              sm="6"
+              md="4"
+              class="d-flex"
+          >
+            <v-card class="w-100" outlined>
+              <v-img
+                  :src="`https://image.tmdb.org/t/p/w300/${actor.profile_path}`"
+                  height="150"
+                  cover
+              />
+              <v-card-text class="text-center">
+                <div class="font-weight-bold text-lg mb-1">{{ actor.name }}</div>
+                <div class="text-grey text-sm">{{ actor.character }}</div>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-col>
     </v-row>
+
   </v-container>
 </template>
