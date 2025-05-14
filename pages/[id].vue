@@ -80,7 +80,8 @@ const { data: movie } = await useFetch<MovieApi, Movie>(
     <v-row class="mt-4">
       <v-col cols="12" md="6">
         <v-img
-            :src="`https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`"
+            v-if="movie?.backdrop_path"
+            :src="`https://image.tmdb.org/t/p/original/${movie.backdrop_path}`"
             cover
         >
           <template #placeholder>
@@ -96,6 +97,8 @@ const { data: movie } = await useFetch<MovieApi, Movie>(
             </v-row>
           </template>
         </v-img>
+        <p v-else>No poster available.</p>
+
       </v-col>
       <v-col cols="12" md="6">
         <div class="text-4xl mb-4 font-bold">{{ movie?.title }}</div>

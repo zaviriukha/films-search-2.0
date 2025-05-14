@@ -20,16 +20,18 @@ function titleStrings(title: string) {
   <v-card class="relative cursor-pointer" @click="router.push(`/${id}`)">
     <v-img
         :src="poster"
-        height="100%"
+        height="350"
         cover
+        class="rounded-t"
     >
       <template #placeholder>
         <v-row class="fill-height ma-0" align="center" justify="center">
-          <v-progress-circular indeterminate color="grey lighten-5" />
+          <v-progress-circular indeterminate color="grey-lighten-5" />
         </v-row>
       </template>
     </v-img>
-    <RateCircle :rating="rating"/>
+
+    <RateCircle :rating="rating" />
 
     <v-card-text>
       <div class="font-weight-bold ms-1 mb-2 text-xl text-white">
@@ -41,4 +43,5 @@ function titleStrings(title: string) {
     </v-card-text>
   </v-card>
 </template>
+
 
