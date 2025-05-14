@@ -48,7 +48,7 @@ interface Movie {
   video: string | null
 }
 
-const { data: movie, pending, error } = await useFetch<MovieApi, Movie>(
+const { data: movie } = await useFetch<MovieApi, Movie>(
     `https://api.themoviedb.org/3/movie/${route.params.id}` +
     `?api_key=${runtimeConfig.public.apiKey}` +
     `&append_to_response=credits,videos`,
@@ -92,9 +92,9 @@ const { data: movie, pending, error } = await useFetch<MovieApi, Movie>(
         </div>
         <div class="d-flex gap-4">
           <v-chip
-              variant="outlined"
               v-for="(genre, index) in movie?.genres"
               :key="index"
+              variant="outlined"
           >
             {{ genre?.name }}
           </v-chip>
@@ -114,7 +114,7 @@ const { data: movie, pending, error } = await useFetch<MovieApi, Movie>(
             height="350"
             frameborder="0"
             allowfullscreen
-        ></iframe>
+        />
         <p v-else>No trailer available.</p>
       </v-col>
 
